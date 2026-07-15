@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { LinkMode } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
 import { isReservedSlug, normalizeSlug } from "@/lib/slug";
@@ -23,7 +24,7 @@ function readLinkPayload(formData: FormData) {
   const rawSlug = String(formData.get("slug") || title).trim();
   const slug = normalizeSlug(rawSlug);
   const targetUrlInput = String(formData.get("targetUrl") || "").trim();
-  const mode = String(formData.get("mode") || "LANDING") === "REDIRECT" ? "REDIRECT" : "LANDING";
+  const mode: LinkMode = String(formData.get("mode") || "LANDING") === "REDIRECT" ? LinkMode.REDIRECT : LinkMode.LANDING;
   const active = formData.get("active") === "on";
   const description = optionalString(formData, "description");
   const venue = optionalString(formData, "venue");
